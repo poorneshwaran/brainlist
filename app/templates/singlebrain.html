@@ -1,0 +1,67 @@
+<html>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<div class="container">
+  <label for "tags"> Brain no </label> 
+  <input id = "tags">
+ <div class="table-responsive col-md-12">
+  <h1>Status</h1>
+    <table class="table table-bordered table-hover table-striped">
+      <thead>
+        <tr>
+          <th>Brainno</th>
+          <th>Seriesid</th>
+  	  <th>Date of perfusion</th>
+	  <th>Date of image</th>
+	  <th>Status</th>
+	  <th>lastupdate</th>
+	  <th>nextstep</th>
+	</tr>
+      </thead>
+      <tbody>
+        {% for file in brainlist %}
+          <tr>
+            <td>{{ file.brainno }}</td>
+            <td>{{ file.seriesid }}</td>
+	    <td>{{ file.dateofperf}}</td> 
+	    <td>{{ file.dateofimg}}</td> 
+	    <td>{{ file.status}}</td> 
+	    <td>{{ file.lastupdate}}</td> 
+	    <td>{{ file.nextstep}}</td> 
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if brainlist.has_other_pages %}
+      <ul class="pagination">
+        {% if brainlist.has_previous %}
+          <li><a href="?page={{ brainlist.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in brainlist.paginator.page_range %}
+          {% if brainlist.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if brainlist.has_next %}
+          <li><a href="?page={{ brainlist.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+    </div>
+
+    </div>
+<script>
+
+
+</script>
+
+</html>
+
+
+

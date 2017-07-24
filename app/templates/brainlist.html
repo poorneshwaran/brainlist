@@ -1,0 +1,212 @@
+<html>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel = "stylesheet" href = "/brainlist/static/font-awesome-4.7.0/css/font-awesome.min.css"/>
+<div class="container">
+  <label for "tags"> Brain no </label> 
+  <input id = "tags">
+ <div class="table-responsive col-md-12">
+  <h1>Status</h1>
+    <table class=" ui stripped table flat table-topic-threads table table-bordered table-hover table-striped">
+      <thead>
+        <tr><th>
+<div class=col-md-12>
+	<div class="col-md-12">Brain no </div>
+	<div class="col-md-12">
+</div>
+</div>
+	</th>
+          <th></br>Seriesid</br></th>
+<th>
+<div class=col-md-12>
+	<div class="col-md-10">Date of perfusion </div>
+	<div class="col-md-2">
+	<div class="col-md-12"><i class="fa fa-sort-asc" id="dop-asc" aria-hidden="true"></i> </div>
+	<div class="col-md-12"><i class="fa fa-sort-desc" id="dop-desc" aria-hidden="true"></i> </div>
+</div>
+
+ </div>
+</th>
+
+<th>
+<div class=col-md-12>
+        <div class="col-md-10">Date of image </div>
+        <div class="col-md-2">
+        <div class="col-md-12"><i class="fa fa-sort-asc" id="doi-asc"aria-hidden="true"></i> </div>
+        <div class="col-md-12"><i class="fa fa-sort-desc" id="doi-desc"aria-hidden="true"></i> </div>
+</div>
+
+ </div> 
+</th>  
+
+	
+	  <th>Status</th>
+<th>
+<div class=col-md-12>
+        <div class="col-md-9">Last Update </div>
+        <div class="col-md-2">
+        <div class="col-md-12"><i class="fa fa-sort-asc" id="lu-asc" aria-hidden="true"></i> </div>
+        <div class="col-md-12"><i class="fa fa-sort-desc" id="lu-desc" aria-hidden="true"></i> </div>
+</div>
+
+ </div> 
+</th>  
+
+
+	  <th>nextstep</th>
+	</tr>
+      </thead>
+      <tbody>
+        {% for file in brainlist %}
+          <tr>
+            <td>{{ file.brainno }}</td>
+            <td>{{ file.seriesid }}</td>
+	    <td>{{ file.dateofperf}}</td> 
+	    <td>{{ file.dateofimg}}</td> 
+	    <td>{{ file.status}}</td> 
+	    <td>{{ file.lastupdate}}</td> 
+	    <td>{{ file.nextstep}}</td> 
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if brainlist.has_other_pages %}
+      <ul class="pagination">
+        {% if brainlist.has_previous %}
+          <li><a href="?page={{ brainlist.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in brainlist.paginator.page_range %}
+          {% if brainlist.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if brainlist.has_next %}
+          <li><a href="?page={{ brainlist.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+    </div>
+
+    </div>
+<script>
+
+var doi_a,doi_d,dop_a,dop_d,lu_a,lu_d;
+
+$(function(){
+	var availablebrains = {{brainnames|safe}};
+	$('#tags').autocomplete({
+		source:availablebrains,
+		change:function(sug,ui){
+			window.location.href = '/brainlist/' + ui.item.value ;
+			
+	}
+});	
+
+});
+
+
+$("#doi-asc").click(function(){
+	doi_a = 1;
+	doi_d = 0;
+	dop_a = 0;
+	dop_d = 0;
+	lu_a = 0; 
+	lu_d = 0;
+	ajax_post(doi_a,doi_d,dop_a,dop_d,lu_a,lu_d);
+});
+
+
+$("#doi-desc").click(function(){
+	doi_a = 0;
+	doi_d = 1;
+	dop_a = 0;
+	dop_d = 0;
+	lu_a = 0; 
+	lu_d = 0;
+
+	ajax_post(doi_a,doi_d,dop_a,dop_d,lu_a,lu_d);
+});
+
+$("#dop-asc").click(function(){
+	doi_a = 0;
+	doi_d = 0;
+	dop_a = 1;
+	dop_d = 0;
+	lu_a = 0; 
+	lu_d = 0;
+
+	ajax_post(doi_a,doi_d,dop_a,dop_d,lu_a,lu_d);
+});
+
+
+$("#dop-desc").click(function(){
+	doi_a = 0;
+	doi_d = 0;
+	dop_a = 0;
+	dop_d = 1;
+	lu_a = 0; 
+	lu_d = 0;
+
+
+
+	ajax_post(doi_a,doi_d,dop_a,dop_d,lu_a,lu_d);
+});
+	
+$("#lu-asc").click(function(){
+
+	doi_a = 0;
+	doi_d = 0;
+	dop_a = 0;
+	dop_d = 0;
+	lu_a = 1; 
+	lu_d = 0;
+
+	ajax_post(doi_a,doi_d,dop_a,dop_d,lu_a,lu_d);
+});
+
+$("#lu-desc").click(function(){
+	doi_a = 0;
+	doi_d = 0;
+	dop_a = 0;
+	dop_d = 0;
+	lu_a = 0; 
+	lu_d = 1;
+
+	ajax_post(doi_a,doi_d,dop_a,dop_d,lu_a,lu_d);
+});
+
+
+function ajax_post(doi_a,doi_d,dop_a,dop_d,lu_a,lu_d )  {
+			data_to_post = JSON.stringify({'doi_a':doi_a,'dop_a':dop_a,'lu_a':lu_a,'doi_d':doi_d,'dop_d':dop_d,'lu_d':lu_d});
+			url = '/brainlist/';
+      $.ajax({
+            type : "POST",
+            url  : url, 
+            data : data_to_post, 
+            success :function(response){
+							//$("html").html(response);
+							//window.location.href =/brainlist/doi;           
+							document.open();
+							document.write(response);
+							document.close();
+
+}
+      }); 
+  }
+
+</script>
+</html>
+
+
+
